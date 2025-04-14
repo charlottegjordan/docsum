@@ -181,9 +181,16 @@ except FileNotFoundError:
     try:
         print(summarize_text(llm_image(None, args.filename).content))
     except groq.BadRequestError:
-        r = requests.get(args.filename)
-        html = r.text
-        soup = BeautifulSoup(html, features='lxml')
-        text = soup.text
-        print(summarize_text(text))
+        try:
+            r = requests.get(args.filename)
+            html = r.text
+            soup = BeautifulSoup(html, features='lxml')
+            text = soup.text
+            print(summarize_text(text))
+        except requests.exceptions.MissingSchema:
+            with open(args.filename, 'r') as fin:
+                html = fin.read()
+                soup = BeautifulSoup(html, features="lxml")
+                text = soup.text
+                print(summarize_text(text))
 
