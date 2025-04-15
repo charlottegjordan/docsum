@@ -83,8 +83,8 @@ def get_mime_type(image_path):
 
 # IMAGE RELATED FUNCTIONS
 def encode_image(image_path):
-  with open(image_path, "rb") as image_file:
-    return base64.b64encode(image_file.read()).decode('utf-8')
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode('utf-8')
 
 def llm_image(image_path = None, url = None):
     if image_path != None and url == None:
@@ -181,16 +181,8 @@ except FileNotFoundError:
     try:
         print(summarize_text(llm_image(None, args.filename).content))
     except groq.BadRequestError:
-        try:
-            r = requests.get(args.filename)
-            html = r.text
-            soup = BeautifulSoup(html, features='lxml')
-            text = soup.text
-            print(summarize_text(text))
-        except requests.exceptions.MissingSchema:
-            with open(args.filename, 'r') as fin:
-                html = fin.read()
-                soup = BeautifulSoup(html, features="lxml")
-                text = soup.text
-                print(summarize_text(text))
-
+        r = requests.get(args.filename)
+        html = r.text
+        soup = BeautifulSoup(html, features='lxml')
+        text = soup.text
+        print(summarize_text(text))
